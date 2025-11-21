@@ -27,6 +27,11 @@ function initGame() {
     score = 0;
     startTime = Date.now();
     
+    // Clear existing timer if any
+    if (timerInterval) {
+        clearInterval(timerInterval);
+    }
+    
     // Start timer
     timerInterval = setInterval(updateTimer, 1000);
     
@@ -69,6 +74,15 @@ function generateProblem() {
     };
 }
 
+// Fisher-Yates shuffle algorithm
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
 // Generate Answer Options
 function generateOptions(correctAnswer) {
     const options = [correctAnswer];
@@ -81,16 +95,16 @@ function generateOptions(correctAnswer) {
         }
     }
     
-    // Shuffle available options
-    availableOptions.sort(() => Math.random() - 0.5);
+    // Shuffle available options using Fisher-Yates
+    shuffleArray(availableOptions);
     
     // Take first 3 as wrong answers
     for (let i = 0; i < 3 && i < availableOptions.length; i++) {
         options.push(availableOptions[i]);
     }
     
-    // Shuffle all options
-    return options.sort(() => Math.random() - 0.5);
+    // Shuffle all options using Fisher-Yates
+    return shuffleArray(options);
 }
 
 // Load Question
