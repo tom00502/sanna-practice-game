@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心算練習遊戲</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>心算練習遊戲</h1>
+        
+        <!-- Game Screen -->
+        <div id="gameScreen" class="screen">
+            <div class="info-bar">
+                <div class="question-counter">題目: <span id="questionNumber">1</span>/10</div>
+                <div class="timer">時間: <span id="timer">0</span>秒</div>
+            </div>
+            
+            <div class="card">
+                <div class="question" id="question">3 + 2</div>
+            </div>
+            
+            <div class="answers">
+                <button class="answer-btn" id="answer1">5</button>
+                <button class="answer-btn" id="answer2">4</button>
+                <button class="answer-btn" id="answer3">6</button>
+                <button class="answer-btn" id="answer4">7</button>
+            </div>
+        </div>
+        
+        <!-- Result Screen -->
+        <div id="resultScreen" class="screen hidden">
+            <h2>遊戲結束！</h2>
+            <div class="result-card">
+                <div class="score-display">
+                    <div class="score-label">你的分數</div>
+                    <div class="score-value" id="finalScore">100</div>
+                </div>
+                <div class="time-display">
+                    <div class="time-label">耗費時間</div>
+                    <div class="time-value" id="finalTime">30 秒</div>
+                </div>
+            </div>
+            <button class="restart-btn" id="restartBtn">再玩一次</button>
+        </div>
+    </div>
+    
+    <script src="game.js"></script>
+</body>
+</html>
