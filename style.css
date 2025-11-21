@@ -209,6 +209,59 @@ h1 {
     transform: translateY(0);
 }
 
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 20px;
+    padding: 50px 40px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    max-width: 400px;
+    width: 90%;
+}
+
+.modal-title {
+    color: #4CAF50;
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+.modal-btn {
+    padding: 15px 50px;
+    font-size: 1.3em;
+    font-weight: bold;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.modal-btn:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.modal-btn:active {
+    transform: translateY(0);
+}
+
 /* Responsive Design */
 @media (max-width: 600px) {
     h1 {
@@ -229,6 +282,14 @@ h1 {
     }
     
     .card {
+        padding: 40px 20px;
+    }
+    
+    .modal-title {
+        font-size: 2em;
+    }
+    
+    .modal-content {
         padding: 40px 20px;
     }
 }
