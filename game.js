@@ -4,7 +4,14 @@ let score = 0;
 let startTime = null;
 let timerInterval = null;
 let correctAnswer = 0;
-let currentLevel = null; // 'addition', 'subtraction', or 'multiplication'
+
+// Level constants
+const LEVELS = {
+    ADDITION: 'addition',
+    SUBTRACTION: 'subtraction',
+    MULTIPLICATION: 'multiplication'
+};
+let currentLevel = null;
 
 // DOM Elements
 const levelScreen = document.getElementById('levelScreen');
@@ -63,11 +70,11 @@ function updateTimer() {
 
 // Generate Random Math Problem based on level
 function generateProblem() {
-    if (currentLevel === 'addition') {
+    if (currentLevel === LEVELS.ADDITION) {
         return generateAdditionProblem();
-    } else if (currentLevel === 'subtraction') {
+    } else if (currentLevel === LEVELS.SUBTRACTION) {
         return generateSubtractionProblem();
-    } else if (currentLevel === 'multiplication') {
+    } else if (currentLevel === LEVELS.MULTIPLICATION) {
         return generateMultiplicationProblem();
     }
 }
@@ -123,11 +130,13 @@ function shuffleArray(array) {
 // Generate Answer Options
 function generateOptions(correctAnswer, maxAnswer) {
     const options = [correctAnswer];
+    const OPTION_RANGE = 5; // Range around correct answer for wrong options
+    const MAX_ATTEMPTS = 20; // Prevent infinite loop
     
     // Create pool of possible wrong answers
     const availableOptions = [];
-    const minOption = Math.max(0, correctAnswer - 5);
-    const maxOption = Math.min(maxAnswer, correctAnswer + 5);
+    const minOption = Math.max(0, correctAnswer - OPTION_RANGE);
+    const maxOption = Math.min(maxAnswer, correctAnswer + OPTION_RANGE);
     
     for (let i = minOption; i <= maxOption; i++) {
         if (i !== correctAnswer && i >= 0) {
@@ -144,11 +153,13 @@ function generateOptions(correctAnswer, maxAnswer) {
     }
     
     // If we don't have enough options, add more from wider range
-    while (options.length < 4) {
+    let attempts = 0;
+    while (options.length < 4 && attempts < MAX_ATTEMPTS) {
         const randomOption = Math.floor(Math.random() * (maxAnswer + 1));
         if (!options.includes(randomOption)) {
             options.push(randomOption);
         }
+        attempts++;
     }
     
     // Shuffle all options using Fisher-Yates
@@ -226,15 +237,15 @@ function endGame() {
 
 // Event Listeners for Level Selection
 additionLevelBtn.addEventListener('click', () => {
-    startGame('addition');
+    startGame(LEVELS.ADDITION);
 });
 
 subtractionLevelBtn.addEventListener('click', () => {
-    startGame('subtraction');
+    startGame(LEVELS.SUBTRACTION);
 });
 
 multiplicationLevelBtn.addEventListener('click', () => {
-    startGame('multiplication');
+    startGame(LEVELS.MULTIPLICATION);
 });
 
 // Event Listeners
