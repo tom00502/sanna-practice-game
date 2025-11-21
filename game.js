@@ -212,10 +212,12 @@ function handleAnswer(selectedButton, selectedAnswer) {
     }
     
     // Move to next question after short delay
+    // Correct answers: 400ms, Incorrect answers: 800ms
     currentQuestion++;
+    const delay = isCorrect ? 400 : 800;
     setTimeout(() => {
         loadQuestion();
-    }, 800);
+    }, delay);
 }
 
 // End Game
