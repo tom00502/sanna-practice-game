@@ -4,8 +4,10 @@ let score = 0;
 let startTime = null;
 let timerInterval = null;
 let correctAnswer = 0;
+let currentLevel = null; // 'addition', 'subtraction', or 'multiplication'
 
 // DOM Elements
+const levelScreen = document.getElementById('levelScreen');
 const gameScreen = document.getElementById('gameScreen');
 const resultScreen = document.getElementById('resultScreen');
 const questionElement = document.getElementById('question');
@@ -20,6 +22,16 @@ const answerButtons = [
 const finalScoreElement = document.getElementById('finalScore');
 const finalTimeElement = document.getElementById('finalTime');
 const restartBtn = document.getElementById('restartBtn');
+const additionLevelBtn = document.getElementById('additionLevel');
+const subtractionLevelBtn = document.getElementById('subtractionLevel');
+const multiplicationLevelBtn = document.getElementById('multiplicationLevel');
+
+// Start game with selected level
+function startGame(level) {
+    currentLevel = level;
+    levelScreen.classList.add('hidden');
+    initGame();
+}
 
 // Initialize Game
 function initGame() {
@@ -49,28 +61,53 @@ function updateTimer() {
     timerElement.textContent = elapsed;
 }
 
-// Generate Random Math Problem (answer <= 10)
+// Generate Random Math Problem based on level
 function generateProblem() {
-    const operators = ['+', '-'];
-    const operator = operators[Math.floor(Math.random() * operators.length)];
-    
-    let num1, num2, answer;
-    
-    if (operator === '+') {
-        // For addition: ensure num1 + num2 <= 10
-        answer = Math.floor(Math.random() * 11); // 0 to 10
-        num1 = Math.floor(Math.random() * (answer + 1));
-        num2 = answer - num1;
-    } else {
-        // For subtraction: ensure result >= 0 and <= 10
-        num1 = Math.floor(Math.random() * 11); // 0 to 10
-        num2 = Math.floor(Math.random() * (num1 + 1));
-        answer = num1 - num2;
+    if (currentLevel === 'addition') {
+        return generateAdditionProblem();
+    } else if (currentLevel === 'subtraction') {
+        return generateSubtractionProblem();
+    } else if (currentLevel === 'multiplication') {
+        return generateMultiplicationProblem();
     }
+}
+
+// Generate Addition Problem (0-10, answer <= 10)
+function generateAdditionProblem() {
+    const answer = Math.floor(Math.random() * 11); // 0 to 10
+    const num1 = Math.floor(Math.random() * (answer + 1));
+    const num2 = answer - num1;
     
     return {
-        question: `${num1} ${operator} ${num2}`,
-        answer: answer
+        question: `${num1} + ${num2}`,
+        answer: answer,
+        maxAnswer: 10
+    };
+}
+
+// Generate Subtraction Problem (0-10, no negative answer)
+function generateSubtractionProblem() {
+    const num1 = Math.floor(Math.random() * 11); // 0 to 10
+    const num2 = Math.floor(Math.random() * (num1 + 1));
+    const answer = num1 - num2;
+    
+    return {
+        question: `${num1} - ${num2}`,
+        answer: answer,
+        maxAnswer: 10
+    };
+}
+
+// Generate Multiplication Problem (1-9 × 1-9)
+function generateMultiplicationProblem() {
+    const num1 = Math.floor(Math.random() * 9) + 1; // 1 to 9
+    const num2 = Math.floor(Math.random() * 9) + 1; // 1 to 9
+    const answer = num1 * num2;
+    
+    return {
+        question: `${num1} × ${num2}`,
+        answer: answer,
+        maxAnswer: 81
     };
 }
 
@@ -84,13 +121,16 @@ function shuffleArray(array) {
 }
 
 // Generate Answer Options
-function generateOptions(correctAnswer) {
+function generateOptions(correctAnswer, maxAnswer) {
     const options = [correctAnswer];
     
-    // Create pool of all possible answers (0-10) excluding correct answer
+    // Create pool of possible wrong answers
     const availableOptions = [];
-    for (let i = 0; i <= 10; i++) {
-        if (i !== correctAnswer) {
+    const minOption = Math.max(0, correctAnswer - 5);
+    const maxOption = Math.min(maxAnswer, correctAnswer + 5);
+    
+    for (let i = minOption; i <= maxOption; i++) {
+        if (i !== correctAnswer && i >= 0) {
             availableOptions.push(i);
         }
     }
@@ -101,6 +141,14 @@ function generateOptions(correctAnswer) {
     // Take first 3 as wrong answers
     for (let i = 0; i < 3 && i < availableOptions.length; i++) {
         options.push(availableOptions[i]);
+    }
+    
+    // If we don't have enough options, add more from wider range
+    while (options.length < 4) {
+        const randomOption = Math.floor(Math.random() * (maxAnswer + 1));
+        if (!options.includes(randomOption)) {
+            options.push(randomOption);
+        }
     }
     
     // Shuffle all options using Fisher-Yates
@@ -123,7 +171,7 @@ function loadQuestion() {
     questionNumberElement.textContent = currentQuestion + 1;
     
     // Generate and display options
-    const options = generateOptions(correctAnswer);
+    const options = generateOptions(correctAnswer, problem.maxAnswer);
     options.forEach((option, index) => {
         answerButtons[index].textContent = option;
         answerButtons[index].className = 'answer-btn';
@@ -176,6 +224,19 @@ function endGame() {
     resultScreen.classList.remove('hidden');
 }
 
+// Event Listeners for Level Selection
+additionLevelBtn.addEventListener('click', () => {
+    startGame('addition');
+});
+
+subtractionLevelBtn.addEventListener('click', () => {
+    startGame('subtraction');
+});
+
+multiplicationLevelBtn.addEventListener('click', () => {
+    startGame('multiplication');
+});
+
 // Event Listeners
 answerButtons.forEach((btn, index) => {
     btn.addEventListener('click', () => {
@@ -185,8 +246,7 @@ answerButtons.forEach((btn, index) => {
 });
 
 restartBtn.addEventListener('click', () => {
-    initGame();
+    // Return to level selection screen
+    resultScreen.classList.add('hidden');
+    levelScreen.classList.remove('hidden');
 });
-
-// Start game on load
-initGame();
