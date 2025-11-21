@@ -10,8 +10,27 @@
     <div class="container">
         <h1>心算練習遊戲</h1>
         
+        <!-- Level Selection Screen -->
+        <div id="levelScreen" class="screen">
+            <h2 class="screen-title">選擇關卡</h2>
+            <div class="level-buttons">
+                <button class="level-btn" id="additionLevel">
+                    <div class="level-title">簡單加法</div>
+                    <div class="level-desc">10以內的加法練習</div>
+                </button>
+                <button class="level-btn" id="subtractionLevel">
+                    <div class="level-title">簡單減法</div>
+                    <div class="level-desc">10以內的減法練習</div>
+                </button>
+                <button class="level-btn" id="multiplicationLevel">
+                    <div class="level-title">九九乘法</div>
+                    <div class="level-desc">九九乘法表練習</div>
+                </button>
+            </div>
+        </div>
+        
         <!-- Game Screen -->
-        <div id="gameScreen" class="screen">
+        <div id="gameScreen" class="screen hidden">
             <div class="info-bar">
                 <div class="question-counter">題目: <span id="questionNumber">1</span>/10</div>
                 <div class="timer">時間: <span id="timer">0</span>秒</div>
