@@ -32,8 +32,20 @@ A simple web-based game designed for elementary school students to practice ment
 - 採用 Fisher-Yates 洗牌演算法確保隨機性
 - 無記憶體洩漏問題
 
+## 線上遊玩 (Play Online)
+
+🎮 [立即開始遊戲 (Play Now)](https://tom00502.github.io/sanna-practice-game/)
+
+遊戲已部署到 GitHub Pages，可以直接在線上遊玩！
+
+The game is deployed on GitHub Pages and can be played online directly!
+
 ## 如何使用 (How to Use)
 
+### 線上版本 (Online Version)
+直接訪問 [https://tom00502.github.io/sanna-practice-game/](https://tom00502.github.io/sanna-practice-game/)
+
+### 本地版本 (Local Version)
 1. 在瀏覽器中打開 `index.html` 文件
 2. 遊戲自動開始
 3. 點選正確答案
@@ -44,10 +56,32 @@ A simple web-based game designed for elementary school students to practice ment
 
 ```
 .
+├── .github/
+│   └── workflows/
+│       └── deploy.yml  # GitHub Pages 部署工作流程
 ├── index.html   # 主頁面結構
 ├── style.css    # 樣式設計
 └── game.js      # 遊戲邏輯
 ```
+
+## 部署 (Deployment)
+
+本專案使用 GitHub Actions 自動部署到 GitHub Pages。
+
+### 部署設置步驟 (Deployment Setup)
+
+1. 確保此 PR 已合併到 `main` 分支
+2. 前往 Repository Settings → Pages
+3. 在 "Build and deployment" 下，選擇 "GitHub Actions" 作為來源
+4. 工作流程將在每次推送到 `main` 分支時自動執行
+5. 部署完成後，網站將在 `https://tom00502.github.io/sanna-practice-game/` 上線
+
+### 自動部署 (Automatic Deployment)
+
+- ✅ 推送到 `main` 分支時自動觸發
+- ✅ 也可通過 GitHub Actions 頁面手動觸發
+- ✅ 使用最新的 GitHub Actions 工作流程
+- ✅ 無需建置步驟，直接部署靜態文件
 
 ## 螢幕截圖 (Screenshots)
 
