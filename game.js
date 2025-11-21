@@ -32,6 +32,8 @@ const restartBtn = document.getElementById('restartBtn');
 const additionLevelBtn = document.getElementById('additionLevel');
 const subtractionLevelBtn = document.getElementById('subtractionLevel');
 const multiplicationLevelBtn = document.getElementById('multiplicationLevel');
+const perfectScoreModal = document.getElementById('perfectScoreModal');
+const modalConfirmBtn = document.getElementById('modalConfirmBtn');
 
 // Start game with selected level
 function startGame(level) {
@@ -233,6 +235,11 @@ function endGame() {
     // Switch to result screen
     gameScreen.classList.add('hidden');
     resultScreen.classList.remove('hidden');
+    
+    // Show perfect score modal if score is 100
+    if (score === 100) {
+        perfectScoreModal.classList.remove('hidden');
+    }
 }
 
 // Event Listeners for Level Selection
@@ -260,4 +267,9 @@ restartBtn.addEventListener('click', () => {
     // Return to level selection screen
     resultScreen.classList.add('hidden');
     levelScreen.classList.remove('hidden');
+});
+
+// Event Listener for Perfect Score Modal
+modalConfirmBtn.addEventListener('click', () => {
+    perfectScoreModal.classList.add('hidden');
 });
