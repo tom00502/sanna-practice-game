@@ -73,25 +73,23 @@ function generateProblem() {
 function generateOptions(correctAnswer) {
     const options = [correctAnswer];
     
-    // Generate 3 wrong answers
-    while (options.length < 4) {
-        // Generate wrong answers within reasonable range
-        let wrongAnswer;
-        if (Math.random() < 0.5) {
-            // Close to correct answer
-            wrongAnswer = correctAnswer + (Math.random() < 0.5 ? 1 : -1);
-        } else {
-            // Random answer from 0 to 10
-            wrongAnswer = Math.floor(Math.random() * 11);
-        }
-        
-        // Make sure it's unique, within range, and not negative
-        if (wrongAnswer >= 0 && wrongAnswer <= 10 && !options.includes(wrongAnswer)) {
-            options.push(wrongAnswer);
+    // Create pool of all possible answers (0-10) excluding correct answer
+    const availableOptions = [];
+    for (let i = 0; i <= 10; i++) {
+        if (i !== correctAnswer) {
+            availableOptions.push(i);
         }
     }
     
-    // Shuffle options
+    // Shuffle available options
+    availableOptions.sort(() => Math.random() - 0.5);
+    
+    // Take first 3 as wrong answers
+    for (let i = 0; i < 3 && i < availableOptions.length; i++) {
+        options.push(availableOptions[i]);
+    }
+    
+    // Shuffle all options
     return options.sort(() => Math.random() - 0.5);
 }
 
