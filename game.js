@@ -9,7 +9,10 @@ let correctAnswer = 0;
 const LEVELS = {
     ADDITION: 'addition',
     SUBTRACTION: 'subtraction',
-    MULTIPLICATION: 'multiplication'
+    MULTIPLICATION: 'multiplication',
+    CHAIN_ADDITION_3: 'chainAddition3',
+    CHAIN_ADDITION_4: 'chainAddition4',
+    DIVISION: 'division'
 };
 let currentLevel = null;
 
@@ -32,6 +35,9 @@ const restartBtn = document.getElementById('restartBtn');
 const additionLevelBtn = document.getElementById('additionLevel');
 const subtractionLevelBtn = document.getElementById('subtractionLevel');
 const multiplicationLevelBtn = document.getElementById('multiplicationLevel');
+const chainAddition3LevelBtn = document.getElementById('chainAddition3Level');
+const chainAddition4LevelBtn = document.getElementById('chainAddition4Level');
+const divisionLevelBtn = document.getElementById('divisionLevel');
 const perfectScoreModal = document.getElementById('perfectScoreModal');
 const modalConfirmBtn = document.getElementById('modalConfirmBtn');
 
@@ -78,6 +84,12 @@ function generateProblem() {
         return generateSubtractionProblem();
     } else if (currentLevel === LEVELS.MULTIPLICATION) {
         return generateMultiplicationProblem();
+    } else if (currentLevel === LEVELS.CHAIN_ADDITION_3) {
+        return generateChainAddition3Problem();
+    } else if (currentLevel === LEVELS.CHAIN_ADDITION_4) {
+        return generateChainAddition4Problem();
+    } else if (currentLevel === LEVELS.DIVISION) {
+        return generateDivisionProblem();
     }
 }
 
@@ -117,6 +129,48 @@ function generateMultiplicationProblem() {
         question: `${num1} × ${num2}`,
         answer: answer,
         maxAnswer: 81
+    };
+}
+
+// Generate Chain Addition 3 Problem (3 single-digit numbers)
+function generateChainAddition3Problem() {
+    const num1 = Math.floor(Math.random() * 10); // 0 to 9
+    const num2 = Math.floor(Math.random() * 10); // 0 to 9
+    const num3 = Math.floor(Math.random() * 10); // 0 to 9
+    const answer = num1 + num2 + num3;
+    
+    return {
+        question: `${num1} + ${num2} + ${num3}`,
+        answer: answer,
+        maxAnswer: 27 // Maximum possible: 9 + 9 + 9
+    };
+}
+
+// Generate Chain Addition 4 Problem (4 single-digit numbers)
+function generateChainAddition4Problem() {
+    const num1 = Math.floor(Math.random() * 10); // 0 to 9
+    const num2 = Math.floor(Math.random() * 10); // 0 to 9
+    const num3 = Math.floor(Math.random() * 10); // 0 to 9
+    const num4 = Math.floor(Math.random() * 10); // 0 to 9
+    const answer = num1 + num2 + num3 + num4;
+    
+    return {
+        question: `${num1} + ${num2} + ${num3} + ${num4}`,
+        answer: answer,
+        maxAnswer: 36 // Maximum possible: 9 + 9 + 9 + 9
+    };
+}
+
+// Generate Division Problem (based on multiplication tables 1-9)
+function generateDivisionProblem() {
+    const divisor = Math.floor(Math.random() * 9) + 1; // 1 to 9
+    const quotient = Math.floor(Math.random() * 9) + 1; // 1 to 9
+    const dividend = divisor * quotient; // This ensures clean division
+    
+    return {
+        question: `${dividend} ÷ ${divisor}`,
+        answer: quotient,
+        maxAnswer: 9 // Answer will always be 1-9
     };
 }
 
@@ -255,6 +309,18 @@ subtractionLevelBtn.addEventListener('click', () => {
 
 multiplicationLevelBtn.addEventListener('click', () => {
     startGame(LEVELS.MULTIPLICATION);
+});
+
+chainAddition3LevelBtn.addEventListener('click', () => {
+    startGame(LEVELS.CHAIN_ADDITION_3);
+});
+
+chainAddition4LevelBtn.addEventListener('click', () => {
+    startGame(LEVELS.CHAIN_ADDITION_4);
+});
+
+divisionLevelBtn.addEventListener('click', () => {
+    startGame(LEVELS.DIVISION);
 });
 
 // Event Listeners
