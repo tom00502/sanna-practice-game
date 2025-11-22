@@ -4,6 +4,7 @@ let score = 0;
 let startTime = null;
 let timerInterval = null;
 let correctAnswer = 0;
+let currentPlayer = null;
 
 // Level constants
 const LEVELS = {
@@ -14,9 +15,20 @@ const LEVELS = {
     CHAIN_ADDITION_4: 'chainAddition4',
     DIVISION: 'division'
 };
+
+const LEVEL_NAMES = {
+    'addition': '簡單加法',
+    'subtraction': '簡單減法',
+    'multiplication': '九九乘法',
+    'chainAddition3': '連加3',
+    'chainAddition4': '連加4',
+    'division': '九九除法'
+};
+
 let currentLevel = null;
 
 // DOM Elements
+const playerScreen = document.getElementById('playerScreen');
 const levelScreen = document.getElementById('levelScreen');
 const gameScreen = document.getElementById('gameScreen');
 const resultScreen = document.getElementById('resultScreen');
@@ -40,9 +52,109 @@ const chainAddition4LevelBtn = document.getElementById('chainAddition4Level');
 const divisionLevelBtn = document.getElementById('divisionLevel');
 const perfectScoreModal = document.getElementById('perfectScoreModal');
 const modalConfirmBtn = document.getElementById('modalConfirmBtn');
+const currentPlayerName = document.getElementById('currentPlayerName');
+const backToPlayerBtn = document.getElementById('backToPlayerBtn');
+const leaderboardModal = document.getElementById('leaderboardModal');
+const leaderboardModalTitle = document.getElementById('leaderboardModalTitle');
+const leaderboardModalBody = document.getElementById('leaderboardModalBody');
+const closeLeaderboardBtn = document.getElementById('closeLeaderboardBtn');
+const resultLeaderboardBody = document.getElementById('resultLeaderboardBody');
+
+// Player buttons
+const playerButtons = document.querySelectorAll('.player-btn');
+const trophyButtons = document.querySelectorAll('.trophy-btn');
+
+// LocalStorage functions
+function getLeaderboard(level) {
+    const key = `leaderboard_${level}`;
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : [];
+}
+
+function saveLeaderboard(level, leaderboard) {
+    const key = `leaderboard_${level}`;
+    localStorage.setItem(key, JSON.stringify(leaderboard));
+}
+
+function addToLeaderboard(level, playerName, score, time) {
+    const leaderboard = getLeaderboard(level);
+    const date = new Date().toISOString();
+    
+    leaderboard.push({
+        player: playerName,
+        score: score,
+        time: time,
+        date: date
+    });
+    
+    // Sort: by score (desc), then by time (asc), then by date (asc)
+    leaderboard.sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        if (a.time !== b.time) return a.time - b.time;
+        return new Date(a.date) - new Date(b.date);
+    });
+    
+    // Keep only top 5
+    const top5 = leaderboard.slice(0, 5);
+    saveLeaderboard(level, top5);
+    
+    return top5;
+}
+
+function formatDate(isoDate) {
+    const date = new Date(isoDate);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}/${month}/${day}`;
+}
+
+function displayLeaderboard(leaderboard, tbody) {
+    tbody.innerHTML = '';
+    
+    if (leaderboard.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty-message">還沒有記錄</td></tr>';
+        return;
+    }
+    
+    leaderboard.forEach((entry, index) => {
+        const row = document.createElement('tr');
+        const rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : '';
+        if (rankClass) row.className = rankClass;
+        
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${entry.player}</td>
+            <td>${entry.score}</td>
+            <td>${entry.time}秒</td>
+            <td>${formatDate(entry.date)}</td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+function showLeaderboardModal(level) {
+    const leaderboard = getLeaderboard(level);
+    const levelName = LEVEL_NAMES[level];
+    leaderboardModalTitle.textContent = `🏆 ${levelName} 排行榜 🏆`;
+    displayLeaderboard(leaderboard, leaderboardModalBody);
+    leaderboardModal.classList.remove('hidden');
+}
+
+// Select player
+function selectPlayer(playerName) {
+    currentPlayer = playerName;
+    currentPlayerName.textContent = playerName;
+    playerScreen.classList.add('hidden');
+    levelScreen.classList.remove('hidden');
+}
 
 // Start game with selected level
 function startGame(level) {
+    if (!currentPlayer) {
+        alert('請先選擇玩家！');
+        return;
+    }
     currentLevel = level;
     levelScreen.classList.add('hidden');
     initGame();
@@ -284,9 +396,15 @@ function endGame() {
     // Calculate time
     const totalTime = Math.floor((Date.now() - startTime) / 1000);
     
+    // Save to leaderboard
+    const leaderboard = addToLeaderboard(currentLevel, currentPlayer, score, totalTime);
+    
     // Show results
     finalScoreElement.textContent = score;
     finalTimeElement.textContent = `${totalTime} 秒`;
+    
+    // Display leaderboard in result screen
+    displayLeaderboard(leaderboard, resultLeaderboardBody);
     
     // Switch to result screen
     gameScreen.classList.add('hidden');
@@ -297,6 +415,22 @@ function endGame() {
         perfectScoreModal.classList.remove('hidden');
     }
 }
+
+// Event Listeners for Player Selection
+playerButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const playerName = button.getAttribute('data-player');
+        selectPlayer(playerName);
+    });
+});
+
+// Event Listeners for Trophy Buttons
+trophyButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const level = button.getAttribute('data-level');
+        showLeaderboardModal(level);
+    });
+});
 
 // Event Listeners for Level Selection
 additionLevelBtn.addEventListener('click', () => {
@@ -335,6 +469,18 @@ restartBtn.addEventListener('click', () => {
     // Return to level selection screen
     resultScreen.classList.add('hidden');
     levelScreen.classList.remove('hidden');
+});
+
+// Event Listener for Back to Player Button
+backToPlayerBtn.addEventListener('click', () => {
+    levelScreen.classList.add('hidden');
+    playerScreen.classList.remove('hidden');
+    currentPlayer = null;
+});
+
+// Event Listener for Close Leaderboard Modal
+closeLeaderboardBtn.addEventListener('click', () => {
+    leaderboardModal.classList.add('hidden');
 });
 
 // Event Listener for Perfect Score Modal

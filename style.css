@@ -46,13 +46,28 @@ h1 {
     margin-bottom: 30px;
 }
 
+.current-player {
+    text-align: center;
+    color: #667eea;
+    font-size: 1.3em;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
 .level-buttons {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
+.level-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
 .level-btn {
+    flex: 1;
     padding: 30px;
     border: 3px solid #333;
     border-radius: 15px;
@@ -81,6 +96,78 @@ h1 {
 .level-desc {
     font-size: 1.2em;
     opacity: 0.9;
+}
+
+.trophy-btn {
+    padding: 15px 20px;
+    font-size: 2em;
+    border: 3px solid #FFD700;
+    border-radius: 10px;
+    background: #FFF8DC;
+    cursor: pointer;
+    transition: all 0.3s;
+    flex-shrink: 0;
+}
+
+.trophy-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
+}
+
+.trophy-btn:active {
+    transform: scale(1.05);
+}
+
+.back-btn {
+    width: 100%;
+    padding: 15px;
+    margin-top: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    background: #999;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.back-btn:hover {
+    background: #888;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.back-btn:active {
+    transform: translateY(0);
+}
+
+/* Player Selection Screen Styles */
+.player-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.player-btn {
+    padding: 30px;
+    font-size: 2em;
+    font-weight: bold;
+    border: 3px solid #333;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #56CCF2 0%, #2F80ED 100%);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.player-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.player-btn:active {
+    transform: translateY(-2px);
 }
 
 /* Game Screen Styles */
@@ -262,6 +349,79 @@ h1 {
     transform: translateY(0);
 }
 
+/* Leaderboard Styles */
+.leaderboard-section {
+    margin-bottom: 30px;
+}
+
+.leaderboard-title {
+    text-align: center;
+    color: #333;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-table th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px 8px;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.leaderboard-table td {
+    padding: 12px 8px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    color: #333;
+    font-size: 0.95em;
+}
+
+.leaderboard-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.leaderboard-table tbody tr:hover {
+    background: #f5f5f5;
+}
+
+.leaderboard-table .rank-1 {
+    background: #FFD700;
+    font-weight: bold;
+}
+
+.leaderboard-table .rank-2 {
+    background: #C0C0C0;
+    font-weight: bold;
+}
+
+.leaderboard-table .rank-3 {
+    background: #CD7F32;
+    font-weight: bold;
+}
+
+.leaderboard-modal {
+    max-width: 600px;
+    min-width: 400px;
+}
+
+.leaderboard-table .empty-message {
+    padding: 40px;
+    text-align: center;
+    color: #999;
+    font-size: 1.2em;
+}
+
 /* Responsive Design */
 @media (max-width: 600px) {
     h1 {
@@ -291,5 +451,29 @@ h1 {
     
     .modal-content {
         padding: 40px 20px;
+    }
+    
+    .leaderboard-modal {
+        min-width: auto;
+        width: 95%;
+    }
+    
+    .leaderboard-table th,
+    .leaderboard-table td {
+        padding: 8px 4px;
+        font-size: 0.85em;
+    }
+    
+    .trophy-btn {
+        font-size: 1.5em;
+        padding: 10px 15px;
+    }
+    
+    .level-row {
+        flex-direction: column;
+    }
+    
+    .level-btn {
+        width: 100%;
     }
 }

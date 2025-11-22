@@ -10,35 +10,65 @@
     <div class="container">
         <h1>心算練習遊戲</h1>
         
-        <!-- Level Selection Screen -->
-        <div id="levelScreen" class="screen">
-            <h2 class="screen-title">選擇關卡</h2>
-            <div class="level-buttons">
-                <button class="level-btn" id="additionLevel">
-                    <div class="level-title">簡單加法</div>
-                    <div class="level-desc">10以內的加法練習</div>
-                </button>
-                <button class="level-btn" id="subtractionLevel">
-                    <div class="level-title">簡單減法</div>
-                    <div class="level-desc">10以內的減法練習</div>
-                </button>
-                <button class="level-btn" id="multiplicationLevel">
-                    <div class="level-title">九九乘法</div>
-                    <div class="level-desc">九九乘法表練習</div>
-                </button>
-                <button class="level-btn" id="chainAddition3Level">
-                    <div class="level-title">連加3</div>
-                    <div class="level-desc">3個個位數的連續加法</div>
-                </button>
-                <button class="level-btn" id="chainAddition4Level">
-                    <div class="level-title">連加4</div>
-                    <div class="level-desc">4個個位數的連續加法</div>
-                </button>
-                <button class="level-btn" id="divisionLevel">
-                    <div class="level-title">九九除法</div>
-                    <div class="level-desc">九九乘法的反向練習</div>
-                </button>
+        <!-- Player Selection Screen -->
+        <div id="playerScreen" class="screen">
+            <h2 class="screen-title">選擇玩家</h2>
+            <div class="player-buttons">
+                <button class="player-btn" data-player="喵喵">喵喵</button>
+                <button class="player-btn" data-player="爸爸">爸爸</button>
+                <button class="player-btn" data-player="媽媽">媽媽</button>
             </div>
+        </div>
+        
+        <!-- Level Selection Screen -->
+        <div id="levelScreen" class="screen hidden">
+            <h2 class="screen-title">選擇關卡</h2>
+            <div class="current-player">目前玩家：<span id="currentPlayerName"></span></div>
+            <div class="level-buttons">
+                <div class="level-row">
+                    <button class="level-btn" id="additionLevel">
+                        <div class="level-title">簡單加法</div>
+                        <div class="level-desc">10以內的加法練習</div>
+                    </button>
+                    <button class="trophy-btn" data-level="addition">🏆</button>
+                </div>
+                <div class="level-row">
+                    <button class="level-btn" id="subtractionLevel">
+                        <div class="level-title">簡單減法</div>
+                        <div class="level-desc">10以內的減法練習</div>
+                    </button>
+                    <button class="trophy-btn" data-level="subtraction">🏆</button>
+                </div>
+                <div class="level-row">
+                    <button class="level-btn" id="multiplicationLevel">
+                        <div class="level-title">九九乘法</div>
+                        <div class="level-desc">九九乘法表練習</div>
+                    </button>
+                    <button class="trophy-btn" data-level="multiplication">🏆</button>
+                </div>
+                <div class="level-row">
+                    <button class="level-btn" id="chainAddition3Level">
+                        <div class="level-title">連加3</div>
+                        <div class="level-desc">3個個位數的連續加法</div>
+                    </button>
+                    <button class="trophy-btn" data-level="chainAddition3">🏆</button>
+                </div>
+                <div class="level-row">
+                    <button class="level-btn" id="chainAddition4Level">
+                        <div class="level-title">連加4</div>
+                        <div class="level-desc">4個個位數的連續加法</div>
+                    </button>
+                    <button class="trophy-btn" data-level="chainAddition4">🏆</button>
+                </div>
+                <div class="level-row">
+                    <button class="level-btn" id="divisionLevel">
+                        <div class="level-title">九九除法</div>
+                        <div class="level-desc">九九乘法的反向練習</div>
+                    </button>
+                    <button class="trophy-btn" data-level="division">🏆</button>
+                </div>
+            </div>
+            <button class="back-btn" id="backToPlayerBtn">更換玩家</button>
         </div>
         
         <!-- Game Screen -->
@@ -73,6 +103,22 @@
                     <div class="time-value" id="finalTime">30 秒</div>
                 </div>
             </div>
+            <div id="resultLeaderboard" class="leaderboard-section">
+                <h3 class="leaderboard-title">🏆 排行榜 🏆</h3>
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>玩家</th>
+                            <th>分數</th>
+                            <th>時間</th>
+                            <th>日期</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultLeaderboardBody">
+                    </tbody>
+                </table>
+            </div>
             <button class="restart-btn" id="restartBtn">再玩一次</button>
         </div>
     </div>
@@ -82,6 +128,27 @@
         <div class="modal-content">
             <h2 class="modal-title">小乖真棒！100分！</h2>
             <button class="modal-btn" id="modalConfirmBtn">確認</button>
+        </div>
+    </div>
+    
+    <!-- Leaderboard Modal -->
+    <div id="leaderboardModal" class="modal hidden">
+        <div class="modal-content leaderboard-modal">
+            <h2 class="modal-title" id="leaderboardModalTitle">🏆 排行榜 🏆</h2>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>排名</th>
+                        <th>玩家</th>
+                        <th>分數</th>
+                        <th>時間</th>
+                        <th>日期</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardModalBody">
+                </tbody>
+            </table>
+            <button class="modal-btn" id="closeLeaderboardBtn">關閉</button>
         </div>
     </div>
     
